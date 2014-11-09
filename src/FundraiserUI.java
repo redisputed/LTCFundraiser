@@ -1,21 +1,35 @@
+
+import java.util.ArrayList;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 /**
  *
- * @author john
+ * @author john davenport
  */
 public class FundraiserUI extends javax.swing.JFrame
 {
+
+    ArrayList<Person> people;
+    private int numberEntries;
+    DefaultTableModel model = new javax.swing.table.DefaultTableModel(
+            new String[]
+            {
+                "Index", "Doner name", "Charity name", "Amount pledged"
+            }, 0
+    );
 
     /**
      * Creates new form FundraiserUI
      */
     public FundraiserUI()
     {
+        people = new ArrayList<>();
         initComponents();
     }
 
@@ -42,14 +56,13 @@ public class FundraiserUI extends javax.swing.JFrame
         btnExit = new javax.swing.JButton();
         btnSubmit = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        table = new javax.swing.JTable();
         btnImportFile = new javax.swing.JButton();
         btnExportFile = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("LTC Fundraiser");
         setBackground(new java.awt.Color(255, 255, 255));
-        setPreferredSize(new java.awt.Dimension(800, 600));
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -62,8 +75,11 @@ public class FundraiserUI extends javax.swing.JFrame
         lblCharity.setText("Charity");
 
         cbCharity.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "The ALS Association, National Office", "Wounded Warrior Project", "American Red Cross", "Susan G. Komen for the Cure", "Doctors Without Borders, USA", "ALS Therapy Development Institute", "American Cancer Society", "ALSAC - St. Jude Children's Research Hospital", "United States Fund for UNICEF", "World Vision" }));
+        cbCharity.setSelectedIndex(-1);
 
         btnExit.setText("Exit");
+        btnExit.setFocusTraversalKeysEnabled(false);
+        btnExit.setFocusable(false);
         btnExit.addActionListener(new java.awt.event.ActionListener()
         {
             public void actionPerformed(java.awt.event.ActionEvent evt)
@@ -73,21 +89,16 @@ public class FundraiserUI extends javax.swing.JFrame
         });
 
         btnSubmit.setText("Submit");
-
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][]
+        btnSubmit.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
             {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String []
-            {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                btnSubmitActionPerformed(evt);
             }
-        ));
-        jScrollPane1.setViewportView(jTable1);
+        });
+
+        table.setModel(model);
+        jScrollPane1.setViewportView(table);
 
         btnImportFile.setText("Import from File");
 
@@ -183,9 +194,88 @@ public class FundraiserUI extends javax.swing.JFrame
 
     private void btnExitActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnExitActionPerformed
     {//GEN-HEADEREND:event_btnExitActionPerformed
-        // TODO add your handling code here:
         System.exit(0);
     }//GEN-LAST:event_btnExitActionPerformed
+
+    private void btnSubmitActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnSubmitActionPerformed
+    {//GEN-HEADEREND:event_btnSubmitActionPerformed
+        getData();
+        addDataToTable();
+        clearInput();
+    }//GEN-LAST:event_btnSubmitActionPerformed
+
+    private void clearInput()
+    {
+        txtFirstName.setText(null);
+        txtLastName.setText(null);
+        txtPledgeAmt.setText(null);
+        cbCharity.setSelectedIndex(-1);
+        txtFirstName.requestFocus();
+    }
+
+    private void getData()
+    {
+        String fname = "";
+        String lname = "";
+        String charity = "";
+        double amt = 0.0;
+
+        try
+        {
+            fname = txtFirstName.getText();
+            lname = txtLastName.getText();
+            amt = Double.parseDouble(txtPledgeAmt.getText());
+            charity = cbCharity.getSelectedItem().toString();
+
+            Person contributor = new Person(fname, lname, amt, charity);
+
+            people.add(contributor);
+        }
+        catch (NumberFormatException e)
+        {
+            JOptionPane.showMessageDialog(null,
+                    "Entered amount pledged is not valid, please try again",
+                    "Invalid amount",
+                    JOptionPane.ERROR_MESSAGE);
+        }
+        catch (NullPointerException e)
+        {
+
+            JOptionPane.showMessageDialog(null,
+                    "All input fields required",
+                    "Input Required",
+                    JOptionPane.ERROR_MESSAGE);
+        }
+
+    }
+
+    private void addDataToTable()
+    {
+        // @author justin klumpe
+        clearTable();
+        model.setRowCount(people.size());
+
+        for (Person p : people)
+        {
+            table.setValueAt(String.valueOf(numberEntries + 1), numberEntries, 0);
+            table.setValueAt(p.getName(), numberEntries, 1);
+            table.setValueAt(p.getCharity(), numberEntries, 2);
+            table.setValueAt(p.getAmtAsFormattedString(), numberEntries, 3);
+            numberEntries++;
+        }
+    }
+
+    private void clearTable()
+    {
+        for (int i = 0; i < numberEntries; i++)
+        {
+            for (int j = 0; j < 4; j++)
+            {
+                table.setValueAt("", i, j);
+            }
+        }
+        numberEntries = 0;
+    }
 
     /**
      * @param args the command line arguments
@@ -236,6 +326,7 @@ public class FundraiserUI extends javax.swing.JFrame
          */
         java.awt.EventQueue.invokeLater(new Runnable()
         {
+            @Override
             public void run()
             {
                 new FundraiserUI().setVisible(true);
@@ -252,11 +343,11 @@ public class FundraiserUI extends javax.swing.JFrame
     private javax.swing.JComboBox cbCharity;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
     private javax.swing.JLabel lblCharity;
     private javax.swing.JLabel lblFirstName;
     private javax.swing.JLabel lblLastName;
     private javax.swing.JLabel lblPledgeAmt;
+    private javax.swing.JTable table;
     private javax.swing.JTextField txtFirstName;
     private javax.swing.JTextField txtLastName;
     private javax.swing.JTextField txtPledgeAmt;
