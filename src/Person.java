@@ -68,4 +68,15 @@ public class Person
         Charity = charity;
     }
 
+    public String writeToFile(char delim)
+    {
+        //Written by John
+        String output = firstName + delim;
+        output += lastName + delim;
+        output += String.valueOf(amtPledged) + delim;
+        output += Charity + delim;
+
+        return output;
+    }
+
 }
