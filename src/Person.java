@@ -68,6 +68,13 @@ public class Person
         Charity = charity;
     }
 
+    /**
+     * Take in a delimeter character and output the object to a single line
+     * String
+     *
+     * @param delim the delimeter used to separate fields within the String
+     * @return String representation of the object contents
+     */
     public String writeToFile(char delim)
     {
         //Written by John

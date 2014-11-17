@@ -225,11 +225,17 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="Import from File"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnImportFileActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="btnExportFile">
           <Properties>
             <Property name="text" type="java.lang.String" value="Export to File"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnExportFileActionPerformed"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>

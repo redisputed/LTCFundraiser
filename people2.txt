@@ -1,0 +1,6 @@
+Test;Tested;124.0;The ALS Association, National Office;
+T2;Tested;154.0;American Red Cross;
+T3;Tested;12.0;ALS Therapy Development Institute;
+T4;Tested;0.0;ALS Therapy Development Institute;
+T5;Tested;12321.0;Wounded Warrior Project;
+Test3;TEST;1245.0;The ALS Association, National Office;

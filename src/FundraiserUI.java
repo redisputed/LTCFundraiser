@@ -101,8 +101,22 @@ public class FundraiserUI extends javax.swing.JFrame
         jScrollPane1.setViewportView(table);
 
         btnImportFile.setText("Import from File");
+        btnImportFile.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                btnImportFileActionPerformed(evt);
+            }
+        });
 
         btnExportFile.setText("Export to File");
+        btnExportFile.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                btnExportFileActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -204,6 +218,32 @@ public class FundraiserUI extends javax.swing.JFrame
         clearInput();
     }//GEN-LAST:event_btnSubmitActionPerformed
 
+    private void btnImportFileActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnImportFileActionPerformed
+    {//GEN-HEADEREND:event_btnImportFileActionPerformed
+        int reply = JOptionPane.showConfirmDialog(null,
+                "This will clear any unsaved information. Continue?",
+                "Continue?",
+                JOptionPane.YES_NO_OPTION);
+        if (reply == JOptionPane.YES_OPTION)
+        {
+            FileOps inputFile = new FileOps();
+            clearArray(people);
+            people = inputFile.loadFile();
+            addDataToTable();
+        }
+
+    }//GEN-LAST:event_btnImportFileActionPerformed
+
+    private void btnExportFileActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnExportFileActionPerformed
+    {//GEN-HEADEREND:event_btnExportFileActionPerformed
+        FileOps outputFile = new FileOps();
+        outputFile.saveFile(people);
+        JOptionPane.showMessageDialog(null,
+                "File Saved Successfully",
+                "File Saved",
+                JOptionPane.INFORMATION_MESSAGE);
+    }//GEN-LAST:event_btnExportFileActionPerformed
+
     private void clearInput()
     {
         txtFirstName.setText(null);
@@ -275,6 +315,11 @@ public class FundraiserUI extends javax.swing.JFrame
             }
         }
         numberEntries = 0;
+    }
+
+    private void clearArray(ArrayList<Person> p)
+    {
+        p.clear();
     }
 
     /**
